@@ -1,5 +1,5 @@
-import config
-import views
+from app import config
+from app import views
 
 from flask import Flask
 
@@ -7,8 +7,7 @@ from flask import Flask
 app = Flask(__name__)
 
 # Load the configuration.
-app.config.from_pyfile('config.py')
-app.secret_key = config.SECRET_KEY
+app.config.from_object('config.DevelopmentConfig')
 
 # Register blueprints.
 app.register_blueprint(views.mod)
