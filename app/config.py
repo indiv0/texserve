@@ -1,7 +1,7 @@
 import os
 
 
-PRODUCTION = False
+PRODUCTION = True
 
 if PRODUCTION:
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
