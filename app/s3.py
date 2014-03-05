@@ -21,12 +21,12 @@ class Bucket(object):
         self.accessKeyID = accessKeyID
         self.secretAccessKey = secretAccessKey
         self.connect()
-        self.createBucket()
+        self.getBucket()
 
     def connect(self):
         self.conn = boto.connect_s3(self.accessKeyID, self.secretAccessKey)
 
-    def createBucket(self):
+    def getBucket(self):
         self.bucket = self.conn.get_bucket(self.bucketName)
 
     def uploadFile(self, fileName):
