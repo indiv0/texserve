@@ -1,0 +1,92 @@
+{
+  "ref": "refs/heads/master",
+  "after": "cee5dff1008e6d35b2a7a456e2f1cddc30ef2a0a",
+  "before": "6b10ed2ce170cc89a1680d9b6dbfd190c01ce9b4",
+  "created": false,
+  "deleted": false,
+  "forced": false,
+  "compare": "https://github.com/Indiv0/notes/compare/6b10ed2ce170...cee5dff1008e",
+  "commits": [
+    {
+      "id": "cee5dff1008e6d35b2a7a456e2f1cddc30ef2a0a",
+      "distinct": true,
+      "message": "Calculus notes",
+      "timestamp": "2014-03-03T18:35:12-08:00",
+      "url": "https://github.com/Indiv0/notes/commit/cee5dff1008e6d35b2a7a456e2f1cddc30ef2a0a",
+      "author": {
+        "name": "Nikita Pekin",
+        "email": "nikitapekin@gmail.com",
+        "username": "Indiv0"
+      },
+      "committer": {
+        "name": "Nikita Pekin",
+        "email": "nikitapekin@gmail.com",
+        "username": "Indiv0"
+      },
+      "added": [
+
+      ],
+      "removed": [
+
+      ],
+      "modified": [
+        "mat1322_lec.tex"
+      ]
+    }
+  ],
+  "head_commit": {
+    "id": "cee5dff1008e6d35b2a7a456e2f1cddc30ef2a0a",
+    "distinct": true,
+    "message": "Calculus notes",
+    "timestamp": "2014-03-03T18:35:12-08:00",
+    "url": "https://github.com/Indiv0/notes/commit/cee5dff1008e6d35b2a7a456e2f1cddc30ef2a0a",
+    "author": {
+      "name": "Nikita Pekin",
+      "email": "nikitapekin@gmail.com",
+      "username": "Indiv0"
+    },
+    "committer": {
+      "name": "Nikita Pekin",
+      "email": "nikitapekin@gmail.com",
+      "username": "Indiv0"
+    },
+    "added": [
+
+    ],
+    "removed": [
+
+    ],
+    "modified": [
+      "mat1322_lec.tex"
+    ]
+  },
+  "repository": {
+    "id": 12942572,
+    "name": "notes",
+    "url": "https://github.com/Indiv0/notes",
+    "description": "Notes I've taken for courses at the University of Ottawa, typeset with LaTeX.",
+    "homepage": "http://nikitapek.in/notes",
+    "watchers": 0,
+    "stargazers": 0,
+    "forks": 0,
+    "fork": false,
+    "size": 1068,
+    "owner": {
+      "name": "Indiv0",
+      "email": "contact@nikitapek.in"
+    },
+    "private": false,
+    "open_issues": 1,
+    "has_issues": true,
+    "has_downloads": true,
+    "has_wiki": true,
+    "language": "TeX",
+    "created_at": 1379573695,
+    "pushed_at": 1393900530,
+    "master_branch": "master"
+  },
+  "pusher": {
+    "name": "Indiv0",
+    "email": "contact@nikitapek.in"
+  }
+}

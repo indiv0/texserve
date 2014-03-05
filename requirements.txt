@@ -1,2 +1,4 @@
+boto
 Flask
 redis
+requests

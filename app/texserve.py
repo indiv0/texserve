@@ -1,12 +1,22 @@
 import os
+import shutil
+import tempfile
+import subprocess
+import time
 
-import redis
 import json
 
+import config
+import s3
+
+#import redis
 #r = redis.StrictRedis(host='172.17.0.16', port=49156, db=0)
 #r.set('foo', 'bar')
 
-def processLatex(payload):
+bucket = s3.Bucket(config.AWS_ACCESS_KEY_ID, config.AWS_SECRET_ACCESS_KEY)
+
+
+def processPayload(payload):
     # JSON stored note information.
     note_data = json.load(open('app/static/notes.json'))
 
@@ -16,82 +26,83 @@ def processLatex(payload):
         for commit in payload['commits']:
             changed_files = commit['modified'] + commit['added']
             for file in changed_files:
-                # Path and filename: e.g. /dgd/fall2013/ and mat1341a_dgd.tex
-                path, filename = os.path.split(file)
-                # Filename without filetype suffix: e.g. mat1341a_dgd
-                filename = filename.rpartition('.')[0]
+                # Split the filename into the name and the extension (e.g. mat1342a_dgd, tex).
+                splitname = file.rpartition('.')
+                name = splitname[0]
+                extension = splitname[2]
+
+                print(extension)
+
+                if extension != 'tex':
+                    print('Skipping non-TeX file {}.'.format(file))
+                    continue
 
                 try:
-                    course = note_data[filename]
+                    course = note_data[name]
                 except KeyError:
+                    print('Could not find the file {} in the documents JSON file.'.format(file))
                     continue
 
                 # Ensure the same commit does not get compiled twice.
                 if course['sha'] == commit['id']:
+                    print('Refusing to recompile commit for the file {}.'.format(file))
                     continue
 
                 # Update with the info from the new commit.
+                print('Updating JSON information for file {} with SHA {} and timestamp {}.'.format(file, commit['id'], commit['timestamp']))
                 course['sha'] = commit['id']
                 course['timestamp'] = commit['timestamp']
 
                 # Add the course to the list of courses to be re-compiled.
-                courses[filename] = course
+                courses[name] = course
     except KeyError:
         raise InvalidUsage('Corrupt payload - missing one of: commits/modified/added/removed')
 
+    if not courses:
+        print('Failed to find any modified LaTeX files to recompile.')
+        return ''
+
+    return processLatex(courses, note_data)
+
+
+def processLatex(courses, note_data):
     try:
         current = os.getcwd()
+        print('Creating temporary working directory.')
         temp = tempfile.mkdtemp()
+        print('Entering temporary working directory {}.'.format(temp))
         os.chdir(temp)
     except:
         raise InvalidUsage('Failed to setup temporary directory.')
 
+    print('Cloning notes repository')
     git(['clone', 'git@github.com:Indiv0/notes.git'])
 
+    os.chdir('notes')
+
     for course_name, course in courses.iteritems():
-        try:
-            os.chdir(temp)
-        except IOError:
-            print("Failed to cd into temporary directory.")
-
         # Get the path and filename (without suffix) for the tex file.
-        type = course['course']['type'].lower()
-        term = course['course']['term'].lower().replace(' ', '')
-        path = type + '/' + term + '/'
-
-        try:
-            os.chdir('notes/' + path)
-        except IOError:
-            print("Failed to cd into tex file directory.")
-
         pdftolatex(course['sha'][:7], getTimeFromTimestamp(course['timestamp']), course_name)
 
-        file_src = temp + '/notes/' + path + '/' + course_name + '.pdf'
+        file_src = course_name + '.pdf'
 
         if not os.path.exists(file_src):
             print('Failed to compile.')
             continue
 
-        target = current + '/tranquill/static/dl/'
-
-        if not os.path.exists(target):
-            os.makedirs(target)
-
         try:
-            shutil.copy(file_src, target + course_name + '.pdf')
+            bucket.uploadFile('course_name.pdf')
         except:
-            print("Failed to copy compiled PDF to destination.")
+            print("Failed to upload compiled PDF to Amazon S3.")
 
         # Update the JSON data.
         note_data[course_name] = course
-        os.chdir(current)
-        with open('tranquill/static/notes.json', 'w') as outfile:
+        with open('app/static/notes.json', 'w') as outfile:
             json.dump(note_data, outfile)
 
+    os.chdir(current)
     # Cleanup the temp directory.
     shutil.rmtree(temp)
-
-    os.chdir(current)
 
     return ''
 
@@ -112,8 +123,6 @@ def git(args):
     details = git.stdout.read()
     details = details.strip()
     return details
-
-
 
 
 def getTimeFromTimestamp(time_string):

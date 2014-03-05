@@ -2,14 +2,8 @@ from flask import Blueprint, request
 from flask import jsonify
 
 import json
-import time
 
-import subprocess
-import os
-import tempfile
-import shutil
-
-from texserve import InvalidUsage, processLatex
+from texserve import InvalidUsage, processPayload
 
 mod = Blueprint('hooks', __name__)
 
@@ -35,7 +29,8 @@ def getPostReceive():
     except KeyError:
         raise InvalidUsage('Corrupt payload: missing ref')
 
-    processLatex(payload)
+    return processPayload(payload)
+
 
 @mod.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
