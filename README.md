@@ -5,19 +5,9 @@ A server-side utility written in Flask to compile LaTeX files to PDF when trigge
 ## Installation ##
 ### Linux ###
 
-Install [dokku-redis-plugin](https://github.com/luxifer/dokku-redis-plugin) first to provide a database to store information.
-
-    cd /var/lib/dokku/plugins
-    git clone https://github.com/luxifer/dokku-redis-plugin redis
-    dokku plugins-install
-
-Create the database (server-side):
-
-    dokku redis:create texserve # Server side
-
 Add the remote (client-side):
 
-    git remote add dokku dokku@107.170.59.29:texserve
+    git remote add dokku dokku@serverip:texserve
 
 Install the application:
 
@@ -28,6 +18,12 @@ Install the application:
 Run the application locally to test:
 
     python wsgi.py
+
+Configure the application on the server-side:
+
+    dokku config:set texserve AWS_ACCESS_KEY_ID=VALUE1
+    dokku config:set texserve AWS_SECRET_ACCESS_KEY=VALUE2
+    dokku config:set texserve BUCKET_NAME=VALUE3
 
 Deploy the application to Dokku:
 

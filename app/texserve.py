@@ -9,12 +9,6 @@ import json
 import config
 import s3
 
-#import redis
-#r = redis.StrictRedis(host='172.17.0.16', port=49156, db=0)
-#r.set('foo', 'bar')
-
-bucket = s3.Bucket(config.AWS_ACCESS_KEY_ID, config.AWS_SECRET_ACCESS_KEY)
-
 
 def processPayload(payload):
     # JSON stored note information.
@@ -30,8 +24,6 @@ def processPayload(payload):
                 splitname = file.rpartition('.')
                 name = splitname[0]
                 extension = splitname[2]
-
-                print(extension)
 
                 if extension != 'tex':
                     print('Skipping non-TeX file {}.'.format(file))
@@ -90,17 +82,19 @@ def processLatex(courses, note_data):
             print('Failed to compile.')
             continue
 
+        from app import bucket
+        bucket.uploadFile('{}.pdf'.format(course_name))
         try:
-            bucket.uploadFile('course_name.pdf')
+            bucket.uploadFile('{}.pdf'.format(course_name))
         except:
             print("Failed to upload compiled PDF to Amazon S3.")
 
+        os.chdir(current)
         # Update the JSON data.
         note_data[course_name] = course
-        with open('app/static/notes.json', 'w') as outfile:
+        with open(current + '/app/static/notes.json', 'w') as outfile:
             json.dump(note_data, outfile)
 
-    os.chdir(current)
     # Cleanup the temp directory.
     shutil.rmtree(temp)
 

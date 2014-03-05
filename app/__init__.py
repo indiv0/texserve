@@ -7,7 +7,10 @@ from flask import Flask
 app = Flask(__name__)
 
 # Load the configuration.
-app.config.from_object('config.DevelopmentConfig')
+app.config.from_object('config.ProductionConfig')
 
 # Register blueprints.
 app.register_blueprint(views.mod)
+
+# Create a representation of the S3 bucket.
+bucket = s3.Bucket(config.BUCKET_NAME, config.AWS_ACCESS_KEY_ID, config.AWS_SECRET_ACCESS_KEY)
