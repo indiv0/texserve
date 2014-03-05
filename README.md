@@ -27,4 +27,4 @@ Configure the application on the server-side:
 
 Deploy the application to Dokku:
 
-    git push dokku master
+    git push dokku
