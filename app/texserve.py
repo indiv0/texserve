@@ -83,18 +83,18 @@ def processLatex(courses, note_data):
             print('Failed to compile.')
             continue
 
-        from app import bucket
-        bucket.uploadFile('{}.pdf'.format(course_name))
         try:
             bucket.uploadFile('{}.pdf'.format(course_name))
-        except:
+        except as e:
             print("Failed to upload compiled PDF to Amazon S3.")
+            print(e.error)
 
         os.chdir(current)
         # Update the JSON data.
         note_data[course_name] = course
         with open(current + '/app/static/notes.json', 'w') as outfile:
             json.dump(note_data, outfile)
+            bucket.uploadFile(outfile)
 
     # Cleanup the temp directory.
     shutil.rmtree(temp)
