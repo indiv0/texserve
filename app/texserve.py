@@ -74,6 +74,7 @@ def processLatex(courses, note_data):
 
     for course_name, course in courses.iteritems():
         # Get the path and filename (without suffix) for the tex file.
+        print('Compiling {} to PDF.'.format(course_name))
         pdftolatex(course['sha'][:7], getTimeFromTimestamp(course['timestamp']), course_name)
 
         file_src = course_name + '.pdf'
