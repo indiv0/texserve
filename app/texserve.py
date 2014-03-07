@@ -11,9 +11,6 @@ import s3
 
 
 def processPayload(payload):
-    # JSON stored note information.
-    note_data = json.load(open('app/static/notes.json'))
-
     # Load the file paths and names.
     courses = {}
     try:
@@ -85,14 +82,14 @@ def processLatex(courses, note_data):
 
         try:
             bucket.uploadFile('{}.pdf'.format(course_name))
-        except as e:
+        except:
             print("Failed to upload compiled PDF to Amazon S3.")
             print(e.error)
 
         os.chdir(current)
         # Update the JSON data.
         note_data[course_name] = course
-        with open(current + '/app/static/notes.json', 'w') as outfile:
+        with open(current + '/notes.json', 'w') as outfile:
             json.dump(note_data, outfile)
             bucket.uploadFile(outfile)
 
