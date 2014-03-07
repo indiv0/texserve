@@ -13,19 +13,19 @@ def index():
 
 @mod.route('/hooks/post-receive', methods=['POST'])
 def getPostReceive():
-    # Extract the JSON payload from the request.
+    print('Extracting JSON payload from the request.')
     try:
         raw_payload = request.form['payload']
     except KeyError:
         raise InvalidUsage('No payload found')
 
-    # Convert the payload into a JSON format.
+    print('Converting the payload from a string into JSON.')
     try:
         payload = json.loads(raw_payload)
     except ValueError:
         raise InvalidUsage('Corrupt JSON in payload')
 
-    # Ensure we are tracking the master branch.
+    print('Ensuring the changes are on the master branch.')
     try:
         if payload['ref'] != 'refs/heads/master':
             return ''

@@ -39,6 +39,6 @@ class Bucket(object):
     def getFile(self, fileName):
         print("Downloading {} from Amazon S3 bucket {}".format(fileName, self.bucketName))
 
-        k = Key(b)
+        k = Key(self.bucket)
         k.key = fileName
         return k.get_contents_as_string()
