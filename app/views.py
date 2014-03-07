@@ -9,7 +9,7 @@ mod = Blueprint('hooks', __name__)
 
 @mod.route('/', methods=['GET'])
 def index():
-    return "Hi! There's <i>nothing<i> here."
+    return "Hi! There's <i>nothing</i> here."
 
 @mod.route('/hooks/post-receive', methods=['POST'])
 def getPostReceive():
