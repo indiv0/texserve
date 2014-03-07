@@ -35,3 +35,10 @@ class Bucket(object):
         k = Key(self.bucket)
         k.key = fileName
         k.set_contents_from_filename(fileName, cb=percent_cb, num_cb=10)
+
+    def getFile(self, fileName):
+        print("Downloading {} from Amazon S3 bucket {}".format(fileName, self.bucketName))
+
+        k = Key(b)
+        k.key = fileName
+        return k.get_contents_as_string()
