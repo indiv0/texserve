@@ -1,1 +1,1 @@
-web: gunicorn wsgi:app -b 0.0.0.0:80
+web: gunicorn wsgi:app
