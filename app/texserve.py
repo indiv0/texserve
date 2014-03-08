@@ -88,7 +88,7 @@ def processLatex(courses, note_data):
         raise InvalidUsage('Failed to setup temporary directory.')
 
     print('Cloning notes repository')
-    git(['clone', 'https://github.com/Indiv0/notes.git'])
+    git(['clone', config.GIT_NOTES_REPO_URL])
 
     os.chdir('notes')
     for course_name, course in courses.iteritems():

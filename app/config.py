@@ -1,5 +1,6 @@
 import os
 
+GIT_NOTES_REPO_URL = 'https://github.com/Indiv0/notes.git'
 
 PRODUCTION = True
 
